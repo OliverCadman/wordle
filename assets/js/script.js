@@ -22,7 +22,6 @@ async function init() {
     const resObject = await res.json();
     const wordOfTheDay = resObject.word.toUpperCase();
     const wordParts = wordOfTheDay.split('');
-    console.log(wordParts);
 
 
     function addLetter(letter) {
@@ -32,7 +31,6 @@ async function init() {
         currentGuess = currentGuess.substring(0, currentGuess.length - 1) + letter;
        }
 
-       console.log(currentGuess);
        letters[(currentRow * ANSWER_LENGTH) + currentGuess.length - 1].textContent = letter;
     }
 
@@ -42,20 +40,15 @@ async function init() {
             return;
         }
 
-
-        // Validate word
-
         // Mark letters as correct/incorrect/wrong
         const guessParts = currentGuess.split('');
         const wordMap = makeMap(wordParts);
-        console.log(wordMap)
 
 
         for (let i = 0; i < ANSWER_LENGTH; i++) {
             if (guessParts[i] === wordParts[i]) {
                 letters[currentRow * ANSWER_LENGTH + i].classList.add('correct');
                wordMap[guessParts[i]]--; 
-                console.log(wordMap);
             }
         }
 
@@ -73,22 +66,18 @@ async function init() {
         if (currentGuess === wordOfTheDay) {
             animate();
             done = true;
-
             successMsg.classList.add('winner');
             successMsg.textContent = 'You win!';
         }
-
         
         currentRow++;
         currentGuess = "";
     }
 
-
     function handleBackspace() {
         currentGuess = currentGuess.substring(0, currentGuess.length - 1);
         letters[ANSWER_LENGTH * currentRow + currentGuess.length].textContent = '';
     }
-
 
   /**
    * TODO 3A: Within async init() function, listen for key strokes
@@ -100,17 +89,14 @@ async function init() {
   document.addEventListener("keyup", function (e) {
 
     if (done) return;
-    
+
     const action = e.key;
-
-
     
     if (action === 'Enter') {
         handleCommit();
     } else if (action === 'Backspace') {
         handleBackspace();
     } else if (isLetter(action)) {
-        console.log(`You pressed the letter ${action}`)
         addLetter(action.toUpperCase());
     } else {
         // do nothing
@@ -118,12 +104,12 @@ async function init() {
   });
 }
 
-
 // TODO 4: Define isLetter function
 function isLetter(char) {
     return /^[a-zA-Z]$/.test(char);
 }
 
+// Make a map of letters and amount of times they appear in word.
 function makeMap(array) {
     const obj = {};
 

@@ -14,6 +14,7 @@ async function init() {
     let currentGuess = '';
     let currentRow = 0;
     const ANSWER_LENGTH = 5;
+    const MAX_ROWS = 6;
     let done = false;
 
     // Define URL and get word of the day
@@ -66,8 +67,15 @@ async function init() {
         if (currentGuess === wordOfTheDay) {
             animate();
             done = true;
-            successMsg.classList.add('winner');
+            successMsg.classList.add('complete');
             successMsg.textContent = 'You win!';
+            return;
+        } else if (currentRow === MAX_ROWS - 1) {
+            animate();
+            done = true;
+            successMsg.classList.add("complete", "wotd");
+            successMsg.innerHTML = `You lose! The word was <span class='wotd'>${wordOfTheDay}</span>`;
+            return;
         }
         
         currentRow++;
